@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -20,8 +21,27 @@ public class Login extends Activity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
+
+        Button button1=(Button) findViewById(R.id.login_bt);
+        Button button2=(Button) findViewById(R.id.registration_bt);
+
+        button1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // TODO : click event
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Login.this, Registration.class);
+
+                startActivity(intent);
+            }
+        });
         callbackManager = CallbackManager.Factory.create();
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -50,12 +70,6 @@ public class Login extends Activity {
     }
 
 
-    public void onClick_handler(View view)
-    {
-        Intent intent = new Intent(Login.this, MainActivity.class);
-
-        startActivity(intent);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

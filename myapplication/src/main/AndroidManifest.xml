@@ -30,6 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Registration"></activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCSVAXyYP5CdLBBUGVamyKxChw2RXRP6pw"/>
