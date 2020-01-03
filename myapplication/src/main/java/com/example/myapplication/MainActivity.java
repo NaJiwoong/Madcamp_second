@@ -11,6 +11,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.myapplication.fragments.PageOneFragment;
 import com.example.myapplication.fragments.PageThreeFragment;
 import com.example.myapplication.fragments.PageTwoFragment;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.material.tabs.TabLayout;
 
 
@@ -19,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
+
+
     Fragment pgoneFrag;
     Fragment pgtwoFrag;
     Fragment pgthrFrag;
@@ -26,7 +31,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /*FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);*/
+
         setContentView(R.layout.activity_main);
+
+
+
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 

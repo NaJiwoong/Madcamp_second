@@ -4,6 +4,9 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
 
+    repositories{
+        mavenCentral()
+    }
 
     defaultConfig {
         applicationId "com.example.myapplication"
@@ -36,6 +39,6 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'com.google.android.gms:play-services:12.0.1'
-
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
 }

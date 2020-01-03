@@ -1,5 +1,6 @@
 package com.example.myapplication.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,11 @@ import androidx.fragment.app.Fragment;
 import com.example.myapplication.ListAdapter;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +28,8 @@ import java.io.InputStream;
 
 public class PageOneFragment extends Fragment {
     ListView mListView;
+
+
     public PageOneFragment() {
     }
     @Nullable
@@ -48,9 +56,13 @@ public class PageOneFragment extends Fragment {
 
 
 
+
         return rootview;
 
     }
+
+
+
     private String getJsonString()
     {
         String json = "";
