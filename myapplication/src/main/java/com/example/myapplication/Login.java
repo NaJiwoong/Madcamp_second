@@ -29,6 +29,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import android.content.SharedPreferences;
+
 public class Login extends Activity {
 
     LoginButton loginButton;
@@ -48,6 +50,11 @@ public class Login extends Activity {
 //        EditText edps = (EditText) findViewById(R.id.passwordText);
 //        final String id = edid.getText().toString();
 //        final String pass = edps.getText().toString();
+
+        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+        String sesId = pref.getString("id", "");
+        String sesPass = pref.getString("password", "");
+        new LoginTask().execute(connectUrl + "/login", sesId, sesPass);
 
 
         button1.setOnClickListener(new View.OnClickListener(){
@@ -156,7 +163,7 @@ public class Login extends Activity {
                         buffer.append(line);
                     }
 
-                    return buffer.toString();
+                    return buffer.toString() + "/" + urls[1] + "/" + urls[2];
                 }catch (Exception e){
                     e.printStackTrace();
                 }finally{
@@ -177,10 +184,25 @@ public class Login extends Activity {
         }
 
         @Override
-        protected void onPostExecute(String result){
-            super.onPostExecute(result);
+        protected void onPostExecute(String result1){
+            super.onPostExecute(result1);
+
+            String[] result_list = result1.split("/");
+            String result = result_list[0];
+            if (result_list.length < 2){
+                return;
+            }
 
             if (result.equals("success")){
+
+                String id = result_list[1];
+                String pass = result_list[2];
+                SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+                SharedPreferences.Editor edit = pref.edit();
+                edit.putString("id", id);
+                edit.putString("password", pass);
+                edit.commit();
+
                 Intent intent = new Intent(Login.this, MainActivity.class);
 
                 startActivity(intent);
