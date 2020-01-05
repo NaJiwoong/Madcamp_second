@@ -206,6 +206,7 @@ public class Login extends Activity {
                 Intent intent = new Intent(Login.this, MainActivity.class);
 
                 startActivity(intent);
+                finish();
             }
             else{
                 Toast.makeText(getApplicationContext(), "Failed to login", Toast.LENGTH_SHORT).show();

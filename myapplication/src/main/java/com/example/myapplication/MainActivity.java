@@ -1,7 +1,14 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -36,6 +43,24 @@ public class MainActivity extends AppCompatActivity {
         AppEventsLogger.activateApp(this);*/
 
         setContentView(R.layout.activity_main);
+
+        Button logout = findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+                SharedPreferences.Editor edit = pref.edit();
+                edit.putString("id", "");
+                edit.putString("password", "");
+                edit.commit();
+
+                Intent intent = new Intent(MainActivity.this, Login.class);
+
+                startActivity(intent);
+                finish();
+
+            }
+        });
 
 
 
