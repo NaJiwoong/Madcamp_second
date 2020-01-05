@@ -58,7 +58,7 @@ public class Login extends Activity {
                 String id = edid.getText().toString();
                 String pass = edps.getText().toString();
                 Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_SHORT).show();
-                new JSONTask().execute(connectUrl + "/login", id, pass);
+                new LoginTask().execute(connectUrl + "/login", id, pass);
             }
         });
 
@@ -108,7 +108,7 @@ public class Login extends Activity {
 
     /* 여기부터 JSONTask 만들기 */
 
-    public class JSONTask extends AsyncTask<String, String, String>{
+    public class LoginTask extends AsyncTask<String, String, String>{
 
         @Override
         protected String doInBackground(String... urls){
