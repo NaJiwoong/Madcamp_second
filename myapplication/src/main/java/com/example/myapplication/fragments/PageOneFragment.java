@@ -1,7 +1,11 @@
 package com.example.myapplication.fragments;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,8 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.example.myapplication.ItemData;
 import com.example.myapplication.ListAdapter;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
@@ -25,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class PageOneFragment extends Fragment {
     ListView mListView;
@@ -39,21 +46,40 @@ public class PageOneFragment extends Fragment {
         ListAdapter mMyAdapter = new ListAdapter(getActivity());
         mListView = (ListView)rootview.findViewById(R.id.listView1);
         mListView.setAdapter(mMyAdapter);
-        try{
-            JSONObject jsonObject = new JSONObject(getJsonString());
-            JSONArray contactArray = jsonObject.getJSONArray("Contacts");
-            for(int i=0; i<contactArray.length(); i++)
-            {
-                JSONObject contactObject = contactArray.getJSONObject(i);
 
-                mMyAdapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.vfdvdfdfv),contactObject.getString("name"), contactObject.getString("num"));
 
-            }
-            mListView.setAdapter(mMyAdapter);
-        }catch (JSONException e) {
-            e.printStackTrace();
+        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+
+        String[] projection = new String[] {
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID, // 연락처 ID -> 사진 정보 가져오는데 사용
+                ContactsContract.CommonDataKinds.Phone.NUMBER,        // 연락처
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME }; // 연락처 이름.
+
+        String[] selectionArgs = null;
+
+        String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
+                + " COLLATE LOCALIZED ASC";
+
+        Cursor contactCursor = getContext().getContentResolver().query(uri, projection, null,selectionArgs, sortOrder);
+
+
+        if (contactCursor.moveToFirst()) {
+            do {
+                String phonenumber = contactCursor.getString(1).replaceAll("-","");
+                if (phonenumber.length() == 10) {
+                    phonenumber = phonenumber.substring(0, 3) + "-"
+                            + phonenumber.substring(3, 6) + "-"
+                            + phonenumber.substring(6);
+                } else if (phonenumber.length() > 8) {
+                    phonenumber = phonenumber.substring(0, 3) + "-"
+                            + phonenumber.substring(3, 7) + "-"
+                            + phonenumber.substring(7);
+                }
+
+
+                mMyAdapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.vfdvdfdfv),contactCursor.getString(2), phonenumber);
+            } while (contactCursor.moveToNext());
         }
-
 
 
 
