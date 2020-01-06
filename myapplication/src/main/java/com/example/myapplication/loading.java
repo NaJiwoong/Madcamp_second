@@ -37,8 +37,15 @@ public class loading extends Activity {
         SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
         String sesId = pref.getString("id", "");
         String sesPass = pref.getString("password", "");
-        new LoginTask().execute(connectUrl + "/login", sesId, sesPass);
+        if (sesId.equals("")){
+            Intent intent = new Intent(loading.this, Login.class);
 
+            startActivity(intent);
+            finish();
+        }
+        else {
+            new LoginTask().execute(connectUrl + "/login", sesId, sesPass);
+        }
     }
 
 

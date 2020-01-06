@@ -51,10 +51,10 @@ public class Login extends Activity {
 //        final String id = edid.getText().toString();
 //        final String pass = edps.getText().toString();
 
-        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
-        String sesId = pref.getString("id", "");
-        String sesPass = pref.getString("password", "");
-        new LoginTask().execute(connectUrl + "/login", sesId, sesPass);
+//        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+//        String sesId = pref.getString("id", "");
+//        String sesPass = pref.getString("password", "");
+//        new LoginTask().execute(connectUrl + "/login", sesId, sesPass);
 
 
         button1.setOnClickListener(new View.OnClickListener(){
