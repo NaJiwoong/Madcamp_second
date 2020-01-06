@@ -2,12 +2,21 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -19,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.annotation.Target;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -30,8 +40,61 @@ public class loading extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
-        startLoading();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkVerify();
+        }else{
+            startLoading();
+        }
+
     }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    void checkVerify(){
+        if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+            if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)){
+                //
+            }
+            requestPermissions(new String[] {Manifest.permission.READ_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE,
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }else{
+            startLoading();
+        }
+        return;
+    }
+
+    @Override
+    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1){
+            if (grantResults.length > 0){
+                for (int i=0; i<grantResults.length; i++){
+                    if (grantResults[i] == PackageManager.PERMISSION_DENIED){
+                        new AlertDialog.Builder(this).setTitle("알림").setMessage("권한이 필요합니다")
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i){
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        Uri uri = Uri.fromParts("Package", getPackageName(), null);
+                                        intent.setData(uri);
+                                        startActivity(intent);
+                                    }
+                                }).create().show();
+                        finish();
+                    }
+                }
+
+                startLoading();
+            }
+        }
+    }
+
+
+
+
+
+
+
     private void startLoading() {
 
         SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
