@@ -5,17 +5,24 @@ import android.content.Intent;
 import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -86,11 +93,62 @@ public class Login extends Activity {
 
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+            private ProfileTracker mProfileTracker;
+            private String email=null;
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Intent intent = new Intent(Login.this, MainActivity.class);
+                /*if(Profile.getCurrentProfile() == null) {
+                    mProfileTracker = new ProfileTracker() {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                            mProfileTracker.stopTracking();
+                            email=currentProfile.g();
+                        }
+                    };
+                    // no need to call startTracking() on mProfileTracker
+                    // because it is called by its constructor, internally.
+                }
+                else {
+                    Profile profile = Profile.getCurrentProfile();
+                    email=profile.getId();
+                }*/
 
-                startActivity(intent);
+                GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+
+                        final JSONObject json = response.getJSONObject();
+
+
+                        try {
+                            if (json != null) {
+                                /*text = "<b>Name :</b> " + json.getString("name") + "<br><br><b>Email :</b> " + json.getString("email") + "<br><br><b>Profile link :</b> " + json.getString("link");
+                                 *//*details_txt.setText(Html.fromHtml(text));
+                    profile.setProfileId(json.getString("id"));*//*
+
+                                Log.e(TAG, json.getString("name"));*/
+                                email = json.getString("email");
+                                //Log.e(TAG, json.getString("id"));
+                                //web.loadData(text, "text/html", "UTF-8");
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //email=String.valueOf(Profile.getCurrentProfile().getId());
+                        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+                        SharedPreferences.Editor edit = pref.edit();
+                        edit.putString("id", email);
+                        edit.putString("password", "facebook");
+                        edit.commit();
+
+                        Intent intent = new Intent(Login.this, MainActivity.class);
+
+                        startActivity(intent);
+                    }
+                });
+                request.executeAsync();
             }
 
             @Override

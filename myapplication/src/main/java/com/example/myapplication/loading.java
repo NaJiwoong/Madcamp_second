@@ -107,6 +107,13 @@ public class loading extends Activity {
             finish();
         }
         else {
+            if(sesId.equals("facebook"))
+            {
+                Intent intent = new Intent(loading.this, MainActivity.class);
+
+                startActivity(intent);
+                finish();
+            }
             new LoginTask().execute(connectUrl + "/login", sesId, sesPass);
         }
     }

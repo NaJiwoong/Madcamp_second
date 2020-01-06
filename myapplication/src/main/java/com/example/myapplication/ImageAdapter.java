@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -9,17 +10,26 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.fragments.PageTwoFragment;
+
+import java.util.ArrayList;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
+    ArrayList<Album> albums= new ArrayList<>();
 
     public ImageAdapter(Context c) {
         mContext = c;
     }
 
+    public ImageAdapter(Context c, ArrayList<Album> list) {
+        mContext = c;
+        albums=list;
+    }
+
     public int getCount() {
-        return mThumbIds.length;
+        return albums.size();
     }
 
     public Object getItem(int position) {
@@ -42,13 +52,19 @@ public class ImageAdapter extends BaseAdapter {
     // create a new ImageView for each item referenced by the Adapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView = new ImageView(mContext);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.pictures, parent, false);
+        ImageView imageView = (ImageView)v.findViewById(R.id.imageView1);
+        //ImageAdapter imageAdapter = new ImageAdapter(getContext());
+        //gridView = (GridView)rootview.findViewById(R.id.gridView1);
+        /*ImageView imageView = new ImageView(mContext);
         imageView.setLayoutParams(new GridView.LayoutParams(300, 400));
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageView.setPadding(5, 5, 5, 5);
-        imageView.setImageResource(mThumbIds[position]);
-        final int pos = position;
-        imageView.setOnClickListener(new View.OnClickListener() {
+        imageView.setPadding(5, 5, 5, 5);*/
+        //imageView.setImageResource(mThumbIds[position]);
+        Glide.with(mContext).load(albums.get(position).getPath()).into(imageView);
+        //final int pos = position;
+        /*imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 View dialogView = (View) View.inflate(mContext, R.layout.dialog, null);
@@ -65,7 +81,7 @@ public class ImageAdapter extends BaseAdapter {
                 });
             }
 
-        });
+        });*/
         return imageView;
     }
 }
