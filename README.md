@@ -35,9 +35,7 @@ to the server, then the server saves them on the database(MongoDB)
   
   
 #### Tab3: ***Not implemented***
-&nbsp;&nbsp;&nbsp;&nbsp;This tab is for ToDoList. We implemented it simply getting input text from Edittext and save the
-input into the textfile in the local storage. After store the data, we make it able to show a list of all input texts that
-it got. We made a remove button for each list element, so that users can remove any list element by simply cliking the remove button.
+&nbsp;&nbsp;&nbsp;&nbsp;***not implemented***<br>
 ********************
 ## Note
 - **permission**  
