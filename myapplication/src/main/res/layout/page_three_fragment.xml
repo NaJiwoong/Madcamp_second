@@ -5,68 +5,18 @@
     android:orientation="vertical"
     android:background="#80FFFFFF"
     >
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/record_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp" />
-        <Spinner
-            android:id="@+id/spinner"
-            android:background="@drawable/spinner_background"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/fonttest"
-            android:padding="0dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="80dp"
-            />
-        <Spinner
-            android:id="@+id/spinnerson"
-            android:background="@drawable/spinner_background"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/fonttest"
-            android:padding="0dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="30dp"
-            />
-        <Spinner
-            android:id="@+id/spinner2"
-            android:background="@drawable/spinner_background"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/fonttest"
-            android:padding="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_alignLeft="@id/spinner"
-            />
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:background="#50FFFFFF">
-        <TextView
-            android:id="@+id/Text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="5dp"
-            android:fontFamily="@font/fonttest"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"
-            android:textSize="20dp"
-            android:background="@drawable/explanation"
-            android:text="한국과학기술원\n대전광역시 유성구 대학로 291 (구성동373-1)"
-            ></TextView>
-    </LinearLayout>
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        />
+    <Button
+        android:id="@+id/record_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        android:text="녹음" />
 </LinearLayout>
