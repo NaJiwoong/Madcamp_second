@@ -18,7 +18,7 @@ Use Express.js as a serverside framework
 ## Description  
 &nbsp;&nbsp;&nbsp;&nbsp;This repository is for madcamp project of second week. 
 In this project, we make an android application with three tabs.
-Each tab has its own content respectively: Address book, Photo gallery, and ***not implemented***.  
+Each tab has its own content respectively: Address book, Photo gallery, and Cleopatra game.  
 
   
 #### Tab1: Address book
