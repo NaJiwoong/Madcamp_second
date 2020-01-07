@@ -212,8 +212,6 @@ public class Room extends Activity implements View.OnClickListener {
             double local_sum=0;
             double deci_sum=0;
 
-            double local_max=0;
-            int max_i=-1;
 
             for (int i = 0; i < toTransform[0].length; i++) {
                 int x = i;
@@ -227,28 +225,16 @@ public class Room extends Activity implements View.OnClickListener {
 
                 if(test1>mcompare)
                     mcompare=test1;
-                if(local_max<Math.abs(toTransform[0][i]))
-                {
-                    local_max=Math.abs(toTransform[0][i]);
-                    max_i=i;
-                }
 
-                /*local_sum+=(Math.abs(toTransform[0][i]) * i*15.625);
-                deci_sum+=(Math.abs(toTransform[0][i]));*/
+                local_sum+=(Math.abs(toTransform[0][i]) * i*15.625);
+                //deci_sum+=(Math.abs(toTransform[0][i]));
                 canvas.drawLine(x, downy, x, upy, paint);
             }
             Log.i("local : ",local_sum+"HZ");
             Log.i("deci : ",deci_sum+"HZ");
-//            local_sum=local_sum/toTransform[0].length;
-            /*if (deci_sum == 0){
-                local_sum = 0;
-            }else {
-                local_sum = local_sum / deci_sum;
-            }
-            sum+=local_sum;*/
-
-            sum+=((double)max_i*15.625);
-
+            local_sum=local_sum/toTransform[0].length;
+            sum+=local_sum;
+            //sum+=((double)max_i*15.625);
             cnt++;
             imageView.invalidate();
         }
