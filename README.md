@@ -1,4 +1,4 @@
-# Madcamp_second: ***Not implemented***
+# Madcamp_second: Cleopatra
 2019 Winter KAIST  
 
 ## Environments
@@ -9,6 +9,7 @@
 
 ### Library
 - Glide 3.7.0
+- FFT
 
 ### Server
 Use Express.js as a serverside framework
@@ -34,17 +35,18 @@ the user to agree to permit read and wirte external local storage. Also, we impl
 to the server, then the server saves them on the database(MongoDB)
   
   
-#### Tab3: ***Not implemented***
-&nbsp;&nbsp;&nbsp;&nbsp;***not implemented***<br>
+#### Tab3: Cleopatra game
+&nbsp;&nbsp;&nbsp;&nbsp;This tab is for Cleopatra game. We implemented as getting all list of game rooms, and users can create new
+room, or enter the existing room. After the game starts, at one user can speak at one time, after recording finish, another user can
+record his/her voice, all users have to speak higher than previous voice record(Hz). All users have their own number of victories, defeats, and highscore.
+
 ********************
+
 ## Note
 - **permission**  
 &nbsp;&nbsp;&nbsp;&nbsp;We need permission to access contacts on the phone, and local storage in order to get contacts 
 from the phone for the Tab1, and get photos from the phone album for the Tab2, and also we have to store 'Todo list' in the 
-local storage as txt file. So we put code below in the 'manifest/AndroidManifest.xml'   
-<br>\<uses-permission android:name="android.permission.READ_CONTACTS"/>
-<br>\<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-<br>\<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/><br><br>
+local storage as txt file. 
 &nbsp;&nbsp;&nbsp;&nbsp;In addition, we have to request users permissions, so we implemented requesting function(checkVerify())
 and overrided function 'onRequestPermissionResult'. After user agree all permission, the function calls a function 'startApp()',
 which will actually start the actual application.  
