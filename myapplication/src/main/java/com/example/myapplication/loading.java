@@ -56,7 +56,7 @@ public class loading extends Activity {
                 //
             }
             requestPermissions(new String[] {Manifest.permission.READ_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE,
-                                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.RECORD_AUDIO}, 1);
         }else{
             startLoading();
         }

@@ -248,6 +248,7 @@ public class Login extends Activity {
             String[] result_list = result1.split("/");
             String result = result_list[0];
             if (result_list.length < 2){
+                Toast.makeText(getApplicationContext(), "Failed to login", Toast.LENGTH_SHORT).show();
                 return;
             }
 

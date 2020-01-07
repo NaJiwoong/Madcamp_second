@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,8 +18,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
 public class Room extends Activity implements View.OnClickListener {
 
+    String connectUrl = "http://192.168.0.100:3001";
     int mcompare=0;
     int frequency = 8000;
     int channelConfiguration = AudioFormat.CHANNEL_CONFIGURATION_MONO;
@@ -29,6 +36,7 @@ public class Room extends Activity implements View.OnClickListener {
 
     Button startStopButton;
     boolean started = false;
+    boolean isMyTurn = false;
 
     RecordAudio recordTask;
 
@@ -38,7 +46,13 @@ public class Room extends Activity implements View.OnClickListener {
     Paint paint;
 
     private double sum=0;
+    private double myHz=-1;
     private int cnt=0;
+
+    Socket mSocket;
+    String username="";
+
+    private Double threshold=0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,7 +60,78 @@ public class Room extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
 
+        try
+        {
+            mSocket= IO.socket(connectUrl);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mSocket.on(Socket.EVENT_CONNECT, (Object... objects) ->{
+                    SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+                    mSocket.emit("enter", pref.getString("id","")+"/"+pref.getString("myRoom",""));
+                });
+
+        mSocket.on("newUser",(Object... objects) ->{
+            String text= objects[0].toString();
+            //Toast.makeText(getApplicationContext(), "0000000000", Toast.LENGTH_SHORT).show();
+            Log.i("socketsocket",text);
+              });
+
+        mSocket.on("myMsg", (Object... objects) ->{
+            Log.i("myMsg","sdvdavsadvsadvsadvsadv");
+        });
+
+        mSocket.on("newMsg", (Object... objects) ->{
+            String text= objects[0].toString();
+            /*String text= objects[0].toString();
+            if(text.equals("start"))
+                started=false;*/
+            Log.i("mmmmmmmmmmmmmmmmmmmmm",text);
+
+            runOnUiThread(()->{
+                threshold = Double.parseDouble(Double.toString((Math.round(Double.parseDouble(text)))));
+                Toast.makeText(getApplicationContext(), "You should be higher than " + Double.toString(Math.round(Double.parseDouble(text))) + "Hz", Toast.LENGTH_LONG).show();
+            });
+
+        });
+
+        mSocket.on("start", (Object... objects) ->{
+            Log.i("startstartstartstart","sssssssssssssssssssssss");
+            runOnUiThread(()->{
+            startStopButton.setEnabled(true);
+                isMyTurn=true;});
+        });
+
+        mSocket.on("victory", (Object... objects) ->{
+           runOnUiThread(()->{
+               String myrest = Double.toString(myHz);
+               Toast.makeText(getApplicationContext(), "You win!!! Your score is " + myrest + "Hz!! ^ ^", Toast.LENGTH_LONG).show();
+           }) ;
+           SharedPreferences pref=getSharedPreferences("login",MODE_PRIVATE);
+            SharedPreferences.Editor edit = pref.edit();
+            edit.putString("victory", Integer.toString(Integer.parseInt(pref.getString("victory","0"))+1));
+            edit.commit();
+            String info_text=pref.getString("id","Anonymous")+
+                    "/"+pref.getString("victory","1")
+                    +"/"+pref.getString("defeat","0")
+                    +"/"+pref.getString("highscore","0");
+            mSocket.emit("pushinfo", info_text);
+        });
+
+
+//        mSocket.on("logout", onLogout);
+        mSocket.connect();
+
+
+
+
         startStopButton = (Button) findViewById(R.id.record_button);
+        if(isMyTurn)
+            startStopButton.setEnabled(true);
+        else
+            startStopButton.setEnabled(false);
         startStopButton.setOnClickListener(this);
 
         transformer = new ca.uol.aig.fftpack.RealDoubleFFT(blockSize);
@@ -95,9 +180,6 @@ public class Room extends Activity implements View.OnClickListener {
                     // 이 값이 short의 최대값이기 때문이다.
                     for (int i = 0; i < blockSize && i < bufferReadResult; i++) {
                         toTransform[i] = (double) buffer[i] / Short.MAX_VALUE; // 부호 있는 16비트
-                        Log.i("buffer", Double.toString(buffer[i]));
-                        Log.i("Short.MAX_VALUE", Short.toString(Short.MAX_VALUE));
-                        Log.i("toTransform", Double.toString(toTransform[i]));
                     }
 
                     // 이제 double값들의 배열을 FFT 객체로 넘겨준다. FFT 객체는 이 배열을 재사용하여 출력 값을 담는다
@@ -177,10 +259,35 @@ public class Room extends Activity implements View.OnClickListener {
             started = false;
             startStopButton.setText("Start");
             recordTask.cancel(true);
-            String text=Double.toString(sum/cnt);
+            myHz=sum/cnt;
+            String text=Double.toString(myHz);
             sum=0;
             cnt=0;
-            Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+            isMyTurn=false;
+
+            SharedPreferences pref=getSharedPreferences("login",MODE_PRIVATE);
+            SharedPreferences.Editor edit = pref.edit();
+            edit.putString("highscore", Integer.toString(Math.max(Integer.parseInt(pref.getString("highscore","0")),(int) Math.round(myHz))));
+            edit.commit();
+            startStopButton.setEnabled(false);
+            if (myHz > threshold){
+                Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+                mSocket.emit("say", Double.toString(myHz));
+            }else{
+                mSocket.emit("say", "-1");
+                String game = "You are lower than " + Double.toString(threshold) + "Hz, your score is " + text + "Hz... T ^ T";
+                Toast.makeText(getApplicationContext(), game, Toast.LENGTH_LONG).show();
+
+                SharedPreferences.Editor edit2 = pref.edit();
+                edit2.putString("defeat", Integer.toString(Integer.parseInt(pref.getString("defeat","0"))+1));
+                edit2.commit();
+                String info_text=pref.getString("id","Anonymous")+
+                        "/"+pref.getString("victory","0")
+                        +"/"+pref.getString("defeat","1")
+                        +"/"+pref.getString("highscore","0");
+                mSocket.emit("pushinfo", info_text);
+            }
+
         } else {
             started = true;
             startStopButton.setText("Stop");
@@ -188,4 +295,16 @@ public class Room extends Activity implements View.OnClickListener {
             recordTask.execute();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+        mSocket.emit("disconn", pref.getString("myRoom",""));
+        Log.i("hahahahahaha",pref.getString("myRoom",""));
+        mSocket.disconnect();
+        mSocket.off();
+    }
+
+
 }

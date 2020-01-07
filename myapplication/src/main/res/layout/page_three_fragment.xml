@@ -11,11 +11,27 @@
         android:gravity="center"
         android:id="@+id/room_list"
         android:layout_weight="1"/>
-    <Button
-        android:id="@+id/enter_button"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-
-        android:text="입장" />
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/refresh_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+        android:text="새로고침" />
+        <Button
+            android:id="@+id/enter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="입장" />
+        <Button
+            android:id="@+id/creatRoom_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="방 생성" />
+    </LinearLayout>
 </LinearLayout>
