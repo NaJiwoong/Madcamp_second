@@ -5,18 +5,17 @@
     android:orientation="vertical"
     android:background="#80FFFFFF"
     >
-    <ImageView
-        android:id="@+id/record_image"
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/room_list"
+        android:layout_weight="1"/>
     <Button
-        android:id="@+id/record_button"
+        android:id="@+id/enter_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
 
-        android:text="녹음" />
+        android:text="입장" />
 </LinearLayout>
