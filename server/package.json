@@ -24,7 +24,7 @@
     "express": "^4.17.1",
     "mongodb": "^3.4.1",
     "pm2": "^4.2.1",
-    "sanitize-html": "^1.18.2",
+    "sanitize-html": "^2.3.2",
     "socket.io": "^2.3.0"
   }
 }
